@@ -1,0 +1,23 @@
+# Use Eclipse Temurin JDK 21 (Alpine for minimal size)
+FROM eclipse-temurin:21-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies (optional, but useful for debugging)
+RUN apk add --no-cache bash curl
+
+# Copy Gradle Wrapper and project files
+COPY gradlew gradlew.bat ./
+COPY gradle/ ./gradle/
+COPY build.gradle settings.gradle ./
+COPY src ./src
+
+# Grant execute permissions to Gradle wrapper
+RUN chmod +x gradlew
+
+# Expose application port
+EXPOSE 8080
+
+# Run the application using Gradle (use 'bootRun' for hot-reloading)
+CMD ["./gradlew", "bootRun"]
